@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
+
+import 'NextScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -94,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Update the state of the app
                 // ...
 
-                // Then close the drawer
+                // Then c
+                // lose the drawer
                 Navigator.pop(context);
               },
             ),
@@ -260,11 +262,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 elevation: 10,
                 splashColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0),
+                    borderRadius: new BorderRadius.circular(20),
                     side: BorderSide(color: Colors.white)),
-                onPressed: () => Toast.show(
-                    '♥  ' + _usernameController.text + ' ♥', context,
-                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+                onPressed: () => Navigator.push(context,
+                    _createRoute()),
+//                    Toast.show(
+//                        '♥  ' + _usernameController.text + ' ♥', context,
+//                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
                 color: Colors.blue,
                 child: const Text('Submit', style: TextStyle(fontSize: 20)),
               ),
@@ -280,6 +284,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => NextScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 5.0);
+        var end = Offset.zero;
+        var curve = Curves.bounceIn;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+        return  SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 
