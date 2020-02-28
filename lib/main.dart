@@ -264,8 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(20),
                     side: BorderSide(color: Colors.white)),
-                onPressed: () => Navigator.push(context,
-                    _createRoute()),
+                onPressed: () => Navigator.push(context, _createRoute()),
 //                    Toast.show(
 //                        '♥  ' + _usernameController.text + ' ♥', context,
 //                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
@@ -295,9 +294,10 @@ class _MyHomePageState extends State<MyHomePage> {
         var end = Offset.zero;
         var curve = Curves.bounceIn;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
-        return  SlideTransition(
+        return SlideTransition(
           position: animation.drive(tween),
           child: child,
         );
