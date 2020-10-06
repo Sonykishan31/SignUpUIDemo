@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'NextScreen.dart';
 
@@ -48,9 +49,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> _list;
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  String _searchText = "";
+  final _nameController = TextEditingController();
+  final _mobileController = TextEditingController();
+  final _emailConroller = TextEditingController();
+  final _addressController = TextEditingController();
   List names = new List(); // names we get from API
   List filteredNames = new List(); // names filtered by search text
   Icon _searchIcon = new Icon(Icons.search);
@@ -183,75 +185,82 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+//            TextFormField(
+////              initialValue: '',
+//              decoration: InputDecoration(
+//                labelText: 'Name',
+//                border: OutlineInputBorder(),
+////                suffixIcon: Icon(
+////                  Icons.error,
+////                ),
+//              ),
+//            ),
+//            SizedBox(height: 10),
             TextFormField(
-              textCapitalization: TextCapitalization.sentences,
-              controller: _usernameController,
+//              initialValue: '',
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              controller: _nameController,
+              onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter name';
+                }
+                return null;
+              },
               decoration: InputDecoration(
-                  filled: true,
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: 'Enter your Name',
-                  hintStyle: TextStyle(fontSize: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  labelStyle: Theme.of(context).textTheme.headline),
+                labelText: 'Enter Name',
+                border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+              ),
             ),
             SizedBox(height: 10),
             TextFormField(
-              textCapitalization: TextCapitalization.sentences,
+//              initialValue: '',
+              textInputAction: TextInputAction.next,
               keyboardType: TextInputType.number,
+              controller: _mobileController,
+              maxLength: 10,
+              onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                  hintStyle: TextStyle(fontSize: 16),
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: 'Enter your Mobile Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  filled: true,
-                  labelStyle: Theme.of(context).textTheme.headline),
+                labelText: 'Enter Mobile',
+                counterText: '',
+                border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+              ),
             ),
             SizedBox(height: 10),
             TextFormField(
+//              initialValue: '',
               keyboardType: TextInputType.emailAddress,
-              textCapitalization: TextCapitalization.sentences,
+              controller: _emailConroller,
+              onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+              textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                  hintStyle: TextStyle(fontSize: 16),
-                  contentPadding: EdgeInsets.all(15),
-                  filled: true,
-                  hintText: 'Enter your Email Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  labelStyle: Theme.of(context).textTheme.headline),
+                labelText: 'Enter Email',
+                border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+              ),
             ),
             SizedBox(height: 10),
             TextFormField(
-              textInputAction: TextInputAction.done,
+//              initialValue: '',
+              controller: _addressController,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                  hintText: 'Enter your Address',
-                  filled: true,
-                  contentPadding: EdgeInsets.all(15),
-                  hintStyle: TextStyle(fontSize: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  labelStyle: Theme.of(context).textTheme.headline),
+                labelText: 'Enter Address',
+                border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+              ),
             ),
             SizedBox(height: 20),
             Container(
@@ -262,12 +271,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 elevation: 10,
                 splashColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20),
+                    borderRadius: new BorderRadius.circular(10),
                     side: BorderSide(color: Colors.white)),
-                onPressed: () => Navigator.push(context, _createRoute()),
-//                    Toast.show(
-//                        '♥  ' + _usernameController.text + ' ♥', context,
-//                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+                onPressed: () {
+                  validateUserInputs();
+                },
+//                onPressed: () => Navigator.push(context, _createRoute()),
+//
                 color: Colors.blue,
                 child: const Text('Submit', style: TextStyle(fontSize: 20)),
               ),
@@ -284,6 +294,26 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  validateUserInputs() {
+    String errMsg = "";
+
+    if (_nameController.text.toString().trim().isEmpty) {
+      errMsg = "Please Enter Name";
+    } else if (_mobileController.text.toString().trim().isEmpty) {
+      errMsg = "Please Enter Mobile Number";
+    } else if (_emailConroller.text.toString().trim().isEmpty) {
+      errMsg = "Please Enter Email Address";
+    } else if (_addressController.text.toString().trim().isEmpty) {
+      errMsg = "Please Enter Address";
+    } else {
+      Navigator.push(context, _createRoute());
+      return;
+    }
+
+    final snackBar = SnackBar(content: Text(errMsg));
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   Route _createRoute() {
