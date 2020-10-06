@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Registration'),
+      home: MyHomePage(title: 'Sign up'),
     );
   }
 }
@@ -48,15 +48,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> _list;
   final _nameController = TextEditingController();
   final _mobileController = TextEditingController();
   final _emailConroller = TextEditingController();
   final _addressController = TextEditingController();
-  List names = new List(); // names we get from API
-  List filteredNames = new List(); // names filtered by search text
-  Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Search Example');
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -70,95 +65,97 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: _scaffoldKey,
-      drawer: Drawer(
-        elevation: 16.0,
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("Sony Kishan"),
-              accountEmail: Text("SonyKishan31@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? Colors.black
-                        : Colors.blue,
-                child: Text(
-                  "SK",
-                  style: TextStyle(fontSize: 30.0),
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('Search'),
-              trailing: Icon(Icons.search),
-              onTap: () {
-                // Update the state of the app
-                // ...
-
-                // Then c
-                // lose the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Wallet'),
-              trailing: Icon(Icons.account_balance_wallet),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Likes'),
-              trailing: Icon(Icons.thumb_up),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Dislikes'),
-              trailing: Icon(Icons.thumb_down),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Messages'),
-              trailing: Icon(Icons.textsms),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Settings'),
-              trailing: Icon(Icons.settings),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+//      drawer: Drawer(
+//        elevation: 16.0,
+//        child: ListView(
+//          // Important: Remove any padding from the ListView.
+//          padding: EdgeInsets.zero,
+//          children: <Widget>[
+//            UserAccountsDrawerHeader(
+//              accountName: Text("Sony Kishan"),
+//              accountEmail: Text("SonyKishan31@gmail.com"),
+//              currentAccountPicture: CircleAvatar(
+//                backgroundColor:
+//                    Theme.of(context).platform == TargetPlatform.android
+//                        ? Colors.black
+//                        : Colors.blue,
+//                child: Text(
+//                  "SK",
+//                  style: TextStyle(fontSize: 30.0),
+//                ),
+//              ),
+//            ),
+//            ListTile(
+//              title: Text('Search'),
+//              trailing: Icon(Icons.search),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//
+//                // Then c
+//                // lose the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Wallet'),
+//              trailing: Icon(Icons.account_balance_wallet),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Likes'),
+//              trailing: Icon(Icons.thumb_up),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Dislikes'),
+//              trailing: Icon(Icons.thumb_down),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Messages'),
+//              trailing: Icon(Icons.textsms),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Settings'),
+//              trailing: Icon(Icons.settings),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//          ],
+//        ),
+//      ),
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () => _scaffoldKey.currentState.openDrawer()),
+        automaticallyImplyLeading: false,
+//centerTitle: true, // To make appbar text in center
+//        leading: IconButton(
+//            icon: Icon(Icons.menu),
+//            onPressed: () => _scaffoldKey.currentState.openDrawer()),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -185,17 +182,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-//            TextFormField(
-////              initialValue: '',
-//              decoration: InputDecoration(
-//                labelText: 'Name',
-//                border: OutlineInputBorder(),
-////                suffixIcon: Icon(
-////                  Icons.error,
-////                ),
-//              ),
-//            ),
-//            SizedBox(height: 10),
             TextFormField(
 //              initialValue: '',
               textInputAction: TextInputAction.next,
@@ -276,20 +262,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   validateUserInputs();
                 },
-//                onPressed: () => Navigator.push(context, _createRoute()),
-//
                 color: Colors.blue,
                 child: const Text('Submit', style: TextStyle(fontSize: 20)),
               ),
             )
-
-//            Text(
-//              'You have pushed the button this many times:',
-//            ),
-//            Text(
-//              '$_counter',
-//              style: Theme.of(context).textTheme.display1,
-//            ),
           ],
         ),
       ),
@@ -303,8 +279,12 @@ class _MyHomePageState extends State<MyHomePage> {
       errMsg = "Please Enter Name";
     } else if (_mobileController.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Mobile Number";
+    } else if (_mobileController.text.toString().trim().length < 10) {
+      errMsg = "Please Enter Valid Mobile Number";
     } else if (_emailConroller.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Email Address";
+    } else if (!isEmail(_emailConroller.text.toString().trim())) {
+      errMsg = "Please Enter Valid Email Address";
     } else if (_addressController.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Address";
     } else {
@@ -335,21 +315,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _searchPressed() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
-        this._appBarTitle = new TextField(
-//          controller: _filter,
-          decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
-        );
-      } else {
-        this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text('Search Example');
-        filteredNames = names;
-//        _filter.clear();
-      }
-    });
+  bool isEmail(String em) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+    print(regExp.hasMatch(em));
+    return regExp.hasMatch(em);
   }
 }

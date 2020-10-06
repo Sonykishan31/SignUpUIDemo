@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NextScreen extends StatelessWidget {
+  final _emailConroller = TextEditingController();
+  final _passwordConroller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +13,7 @@ class NextScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context, true);
             }),
-        title: Text("Login Screen"),
+        title: Text("Login"),
 //        actions: <Widget>[
 //          IconButton(icon: Icon(Icons.search), onPressed: () {})
 //        ],
@@ -22,39 +25,33 @@ class NextScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                textCapitalization: TextCapitalization.sentences,
+//              initialValue: '',
                 keyboardType: TextInputType.emailAddress,
+                controller: _emailConroller,
+                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                    filled: true,
-                    contentPadding: EdgeInsets.all(15),
-                    hintText: 'Email',
-                    hintStyle: TextStyle(fontSize: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    labelStyle: Theme.of(context).textTheme.headline),
+                  labelText: 'Enter Email',
+                  border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+                ),
               ),
               SizedBox(height: 10),
               TextFormField(
-                textCapitalization: TextCapitalization.sentences,
+//              initialValue: '',
                 obscureText: true,
+                controller: _passwordConroller,
+                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                    filled: true,
-                    contentPadding: EdgeInsets.all(15),
-                    hintText: 'Password',
-                    hintStyle: TextStyle(fontSize: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    labelStyle: Theme.of(context).textTheme.headline),
+                  labelText: 'Enter Password',
+                  border: OutlineInputBorder(),
+//                suffixIcon: Icon(
+//                  Icons.error,
+//                ),
+                ),
               ),
               SizedBox(height: 10),
               Container(
