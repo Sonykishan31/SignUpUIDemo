@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class NextScreen extends StatelessWidget {
   final _emailConroller = TextEditingController();
   final _passwordConroller = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -20,16 +22,14 @@ class NextScreen extends StatelessWidget {
       ),
       body: Container(
         padding: new EdgeInsets.all(20.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+//            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextFormField(
 //              initialValue: '',
                 keyboardType: TextInputType.emailAddress,
                 controller: _emailConroller,
                 onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   labelText: 'Enter Email',
                   border: OutlineInputBorder(),
@@ -43,8 +43,6 @@ class NextScreen extends StatelessWidget {
 //              initialValue: '',
                 obscureText: true,
                 controller: _passwordConroller,
-                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   labelText: 'Enter Password',
                   border: OutlineInputBorder(),
@@ -55,20 +53,21 @@ class NextScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Container(
-                width: 120,
-                height: 40,
+                width: double.infinity,
+                height: 60,
                 child: RaisedButton(
                   textColor: Colors.white,
-                  elevation: 10,
+                  elevation: 2,
                   splashColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(20),
+                      borderRadius: new BorderRadius.circular(10),
                       side: BorderSide(color: Colors.white)),
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NextScreen())),
-//                    Toast.show(
-//                        '♥  ' + _usernameController.text + ' ♥', context,
-//                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+//                  onPressed: () => Navigator.push(context,
+//                      MaterialPageRoute(builder: (context) => NextScreen())),
+////
+                  onPressed: () {
+                    validateUserInputs();
+                  },
                   color: Colors.blue,
                   child: const Text('Login', style: TextStyle(fontSize: 20)),
                 ),
@@ -76,5 +75,24 @@ class NextScreen extends StatelessWidget {
             ]),
       ),
     );
+  }
+
+  validateUserInputs() {
+//    String errMsg = "";
+//
+//    if (_emailConroller.text.toString().trim().isEmpty) {
+//      errMsg = "Please Enter Email Address";
+//    } else if (!Utils.isEmail(_emailConroller.text.toString().trim())) {
+//      errMsg = "Please Enter Valid Email Address";
+//    } else if (_passwordConroller.text.toString().trim().isEmpty) {
+//      errMsg = "Please Enter Password";
+//    } else if (_passwordConroller.text.toString().trim().length < 6) {
+//      errMsg = "Password must be 6 characters long.";
+//    } else {
+//      errMsg = "You are logged in successfully.";
+//    }
+//
+//    final snackBar = SnackBar(content: Text(errMsg));
+//    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

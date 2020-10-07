@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'constants.dart' as Utils;
+import 'dart:convert';
 import 'NextScreen.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -53,6 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final _emailConroller = TextEditingController();
   final _addressController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List list = List();
+  var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,93 +69,89 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: _scaffoldKey,
-//      drawer: Drawer(
-//        elevation: 16.0,
-//        child: ListView(
-//          // Important: Remove any padding from the ListView.
-//          padding: EdgeInsets.zero,
-//          children: <Widget>[
-//            UserAccountsDrawerHeader(
-//              accountName: Text("Sony Kishan"),
-//              accountEmail: Text("SonyKishan31@gmail.com"),
-//              currentAccountPicture: CircleAvatar(
-//                backgroundColor:
-//                    Theme.of(context).platform == TargetPlatform.android
-//                        ? Colors.black
-//                        : Colors.blue,
-//                child: Text(
-//                  "SK",
-//                  style: TextStyle(fontSize: 30.0),
-//                ),
-//              ),
-//            ),
-//            ListTile(
-//              title: Text('Search'),
-//              trailing: Icon(Icons.search),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//
-//                // Then c
-//                // lose the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//            ListTile(
-//              title: Text('Wallet'),
-//              trailing: Icon(Icons.account_balance_wallet),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//            ListTile(
-//              title: Text('Likes'),
-//              trailing: Icon(Icons.thumb_up),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//            ListTile(
-//              title: Text('Dislikes'),
-//              trailing: Icon(Icons.thumb_down),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//            ListTile(
-//              title: Text('Messages'),
-//              trailing: Icon(Icons.textsms),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//            ListTile(
-//              title: Text('Settings'),
-//              trailing: Icon(Icons.settings),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.pop(context);
-//              },
-//            ),
-//          ],
-//        ),
-//      ),
+      drawer: Drawer(
+        elevation: 16.0,
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text("Sony Kishan"),
+              accountEmail: Text("SonyKishan31@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? Colors.black
+                        : Colors.blue,
+                child: Text(
+                  "SK",
+                  style: TextStyle(fontSize: 30.0),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Search'),
+              trailing: Icon(Icons.search),
+              onTap: () {
+                _fetchData();
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Wallet'),
+              trailing: Icon(Icons.account_balance_wallet),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Likes'),
+              trailing: Icon(Icons.thumb_up),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Dislikes'),
+              trailing: Icon(Icons.thumb_down),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Messages'),
+              trailing: Icon(Icons.textsms),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Settings'),
+              trailing: Icon(Icons.settings),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+//        automaticallyImplyLeading: false,
 //centerTitle: true, // To make appbar text in center
 //        leading: IconButton(
 //            icon: Icon(Icons.menu),
@@ -250,11 +250,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(height: 20),
             Container(
-              width: 120,
-              height: 40,
+              width: double.infinity,
+              height: 60,
               child: RaisedButton(
                 textColor: Colors.white,
-                elevation: 10,
+                elevation: 2,
                 splashColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(10),
@@ -272,6 +272,31 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  _fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final response =
+        await http.get("https://jsonplaceholder.typicode.com/photos");
+    if (response.statusCode == 200) {
+      list.clear();
+      if (list.isNotEmpty) {
+        print('before : ${list.length}');
+      }
+      list = json.decode('['+response.body+']') as List;
+
+
+      setState(() {
+        isLoading = false;
+      });
+
+      print('after : ${list.length}');
+    } else {
+      throw Exception('Failed to load photos');
+    }
+  }
+
   validateUserInputs() {
     String errMsg = "";
 
@@ -283,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
       errMsg = "Please Enter Valid Mobile Number";
     } else if (_emailConroller.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Email Address";
-    } else if (!isEmail(_emailConroller.text.toString().trim())) {
+    } else if (!Utils.isEmail(_emailConroller.text.toString().trim())) {
       errMsg = "Please Enter Valid Email Address";
     } else if (_addressController.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Address";
@@ -313,14 +338,5 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
-  }
-
-  bool isEmail(String em) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    RegExp regExp = new RegExp(p);
-    print(regExp.hasMatch(em));
-    return regExp.hasMatch(em);
   }
 }
