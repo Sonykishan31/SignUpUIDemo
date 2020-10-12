@@ -1,9 +1,12 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'constants.dart' as Utils;
-import 'dart:convert';
-import 'NextScreen.dart';
 import 'package:http/http.dart' as http;
+
+import 'NextScreen.dart';
+import 'constants.dart' as Utils;
 
 void main() => runApp(MyApp());
 
@@ -138,14 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              title: Text('Settings'),
-              trailing: Icon(Icons.settings),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
+              title: Text('Logout'),
+              trailing: Icon(Icons.exit_to_app),
+              onTap: () => {showAlertDialog(_scaffoldKey.currentState.context)},
             ),
           ],
         ),
@@ -284,8 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (list.isNotEmpty) {
         print('before : ${list.length}');
       }
-      list = json.decode('['+response.body+']') as List;
-
+      list = json.decode('[' + response.body + ']') as List;
 
       setState(() {
         isLoading = false;
@@ -313,12 +310,47 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (_addressController.text.toString().trim().isEmpty) {
       errMsg = "Please Enter Address";
     } else {
-      Navigator.push(context, _createRoute());
+      navigateToLogin();
       return;
     }
 
     final snackBar = SnackBar(content: Text(errMsg));
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  void navigateToLogin() {
+    Navigator.push(context, _createRoute());
+  }
+
+  void showAlertDialog(BuildContext context) {
+    Navigator.pop(context);
+
+    showDialog(
+        context: context,
+        child: CupertinoAlertDialog(
+          title: Text("Log out?"),
+          content: Text("Are you sure you want to log out?"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            CupertinoDialogAction(
+                textStyle: TextStyle(color: Colors.red),
+                isDefaultAction: true,
+                onPressed: () async {
+                  Navigator.pop(context);
+                  navigateToLogin();
+//                  SharedPreferences prefs = await SharedPreferences.getInstance();
+//                  prefs.remove('isLogin');
+//                  Navigator.pushReplacement(context,
+//                      MaterialPageRoute(builder: (BuildContext ctx) => LoginScreen()));
+                },
+                child: Text("Log out")),
+          ],
+        ));
   }
 
   Route _createRoute() {
