@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 
-class NextScreen extends StatelessWidget {
+
+
+class NextScreen extends StatefulWidget {
+  @override
+  _NextScreenState createState() => _NextScreenState();
+}
+
+class _NextScreenState extends State<NextScreen> {
   final _emailConroller = TextEditingController();
+
   final _passwordConroller = TextEditingController();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override

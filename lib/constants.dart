@@ -8,3 +8,8 @@ bool isEmail(String em) {
   print(regExp.hasMatch(em));
   return regExp.hasMatch(em);
 }
+
+
+showSnackBar(String msg){
+
+}

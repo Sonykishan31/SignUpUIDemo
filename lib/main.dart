@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'ListExample.dart';
 import 'NextScreen.dart';
 import 'constants.dart' as Utils;
 
@@ -65,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
+
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
@@ -96,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Search'),
               trailing: Icon(Icons.search),
               onTap: () {
-                _fetchData();
                 Navigator.pop(context);
+                _fetchData();
               },
             ),
             ListTile(
@@ -110,34 +112,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: Text('Likes'),
-              trailing: Icon(Icons.thumb_up),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Dislikes'),
-              trailing: Icon(Icons.thumb_down),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
+//            ListTile(
+//              title: Text('Likes'),
+//              trailing: Icon(Icons.thumb_up),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
+//            ListTile(
+//              title: Text('Dislikes'),
+//              trailing: Icon(Icons.thumb_down),
+//              onTap: () {
+//                // Update the state of the app
+//                // ...
+//                // Then close the drawer
+//                Navigator.pop(context);
+//              },
+//            ),
             ListTile(
               title: Text('Messages'),
               trailing: Icon(Icons.textsms),
               onTap: () {
+                navigateToList();
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                Navigator.pop(context);
+//                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -322,6 +325,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(context, _createRoute());
   }
 
+  void navigateToList() {
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ListExample()));
+  }
+
   void showAlertDialog(BuildContext context) {
     Navigator.pop(context);
 
@@ -342,7 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isDefaultAction: true,
                 onPressed: () async {
                   Navigator.pop(context);
-                  navigateToLogin();
+                  SystemNavigator.pop();
 //                  SharedPreferences prefs = await SharedPreferences.getInstance();
 //                  prefs.remove('isLogin');
 //                  Navigator.pushReplacement(context,
