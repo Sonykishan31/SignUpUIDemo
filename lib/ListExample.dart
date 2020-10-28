@@ -33,7 +33,7 @@ class _ListExampleState extends State<ListExample> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  void _clearAllItems() {
+  void removeAllItems() {
     for (var i = 0; i <= _list.length - 1; i++) {
       _listKey.currentState.removeItem(0,
               (BuildContext context, Animation<double> animation) {
@@ -118,7 +118,7 @@ class _ListExampleState extends State<ListExample> {
           ),
           SizedBox(width: 20),
           FloatingActionButton(
-            onPressed: () => _clearAllItems(),
+            onPressed: () => removeAllItems(),
             tooltip: 'ClearAll',
             heroTag: 'btn3',
             child: Icon(Icons.clear_all),
